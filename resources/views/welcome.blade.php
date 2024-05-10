@@ -63,6 +63,7 @@
                     console.error(xhr.responseText);
                 }
             });
+            listFiles();
         });
 
         function listFiles() {
@@ -78,9 +79,32 @@
                 success: function(response) {
                     $('#fileList').empty();
                     response.files.forEach(function(file) {
-                        $('#fileList').append('<li>' + file +
-                            ' <button class="delete" data-path="' + file +
-                            '">Delete</button></li>');
+                        // Extract file name and extension
+                        var fileName = file.split('/').pop();
+                        var fileExt = fileName.split('.').pop();
+
+                        // Define icons based on file extension
+                        var iconClass = 'fa-file';
+                        if (['jpg', 'jpeg', 'png', 'gif'].indexOf(fileExt.toLowerCase()) !==
+                            -1) {
+                            iconClass = 'fa-image';
+                        } else if (['pdf'].indexOf(fileExt.toLowerCase()) !== -1) {
+                            iconClass = 'fa-file-pdf';
+                        } else if (['doc', 'docx'].indexOf(fileExt.toLowerCase()) !== -1) {
+                            iconClass = 'fa-file-word';
+                        } else if (['xls', 'xlsx'].indexOf(fileExt.toLowerCase()) !== -1) {
+                            iconClass = 'fa-file-excel';
+                        } else if (['ppt', 'pptx'].indexOf(fileExt.toLowerCase()) !== -1) {
+                            iconClass = 'fa-file-powerpoint';
+                        }
+
+                        // Append file item to the list
+                        $('#fileList').append('<li class="list-group-item">' +
+                            '<i class="fas ' + iconClass + ' mr-2"></i>' +
+                            '<span>' + fileName + '</span>' +
+                            '<button class="btn btn-sm btn-danger float-right delete" data-path="' +
+                            file + '">Delete</button>' +
+                            '</li>');
                     });
                 },
                 error: function(xhr, status, error) {
@@ -107,11 +131,13 @@
                 success: function(response) {
                     console.log(response);
                     listFiles();
+                    location.reload();
                 },
                 error: function(xhr, status, error) {
                     console.error(xhr.responseText);
                 }
             });
+            listFiles();
         });
 
         listFiles();

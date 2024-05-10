@@ -14,7 +14,7 @@ use App\Http\Controllers\FileController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('filemanager');
 });
 Route::post('/upload', [FileController::class, 'upload']);
 Route::get('/list-files', [FileController::class, 'listFiles']);
